@@ -1,0 +1,6 @@
+Z:\files\LugaPasal\LugaPasalModals\bin\Debug\LugaPasalModals.dll
+Z:\files\LugaPasal\LugaPasalModals\bin\Debug\LugaPasalModals.pdb
+Z:\files\LugaPasal\LugaPasalModals\obj\Debug\LugaPasalModals.csprojAssemblyReference.cache
+Z:\files\LugaPasal\LugaPasalModals\obj\Debug\LugaPasalModals.csproj.CoreCompileInputs.cache
+Z:\files\LugaPasal\LugaPasalModals\obj\Debug\LugaPasalModals.dll
+Z:\files\LugaPasal\LugaPasalModals\obj\Debug\LugaPasalModals.pdb

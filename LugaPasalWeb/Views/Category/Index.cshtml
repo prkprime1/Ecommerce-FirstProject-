@@ -1,0 +1,163 @@
+﻿@model IEnumerable<LugaPasalModals.CategoryModal>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<section class="flat-row flat-iconbox">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="title-section">
+                    <h2 class="title">
+                        Category
+                    </h2>
+                </div><!-- /.title-section -->
+            </div><!-- /.col-md-12 -->
+        </div><!-- /.row -->
+
+    </div><!-- /.container -->
+</section>
+
+
+<div>
+    <form method="post">
+        <input id="Searchtxt" type="text" name="Search" value="" />
+
+    </form>
+    <button type="button" id="btnSearch">Search </button>
+    <button type="button" id="Newbtn">New </button>
+</div>
+
+
+
+
+
+
+
+
+<Div class="container">
+
+    <table class="table table-dark">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+
+            </tr>
+         </thead>
+
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+
+                        <td>
+                            <button class="editbutton" data-id="@item.ID">Edit</button>
+                            <button class="DeleteButton" data-id="@item.ID">Delete</button>
+
+                        </td>
+                    </tr>
+                }
+            }
+
+
+
+    </table>
+</Div>
+<script>
+    $("#btnSearch").click(function () {
+        var searchValue = $("#Searchtxt").val();
+        $.ajax({
+            url: '/Category/Index',
+            data: {
+                Search: searchValue // search vaneko controller ma pathako Search pachadi ko vaneko mathi ko
+            }
+        })
+            .done(function (response) {
+                $("#TableContainer").html(response); // table container vaneko sabai utai ma dekhaune ko id
+            })
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+    });
+
+    $("#Newbtn").click(function () {
+        $.ajax({
+            url: '/Category/Create',
+        })
+            .done(function (response) {
+                $("#actionContainer").html(response);
+                FocusAction();
+            })
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+    });
+
+
+    $(".editbutton").click(function () {
+        $.ajax({
+            url: '@Url.Action("Edit", "Category")'  , 
+            data: {
+                ID: $(this).attr('data-id')
+            }
+        })
+            .done(function (response) {
+                $("#actionContainer").html(response);
+                FocusAction();
+            })
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+    });
+
+        $(".DeleteButton").click(function () {
+
+            var con = confirm("Are you want to delte");
+            if (con) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Category/Delete',
+                    data: {
+                        ID: $(this).attr('data-id')
+                    }
+
+                })
+
+
+                    .done(function (response) {
+                        $("#TableContainer").html(response);
+                    })
+
+                    .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                        alert("Fail");
+                    });
+            }
+
+        });
+
+    function FocusAction() {
+
+        $('html, body').animate({
+
+            scrollTop: $("#actionContainer").offset().top = 700 // action conatiner jata dekhaue teta
+        }, 1000);
+
+    }
+
+    
+
+
+</script>

@@ -1,0 +1,159 @@
+﻿@model LugaPasalModals.CategoryModal
+
+@{
+    ViewBag.Title = "Create";
+}
+
+    <section class="flat-row flat-iconbox">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="title-section">
+                        <h2 class="title">
+                            Create
+                        </h2>
+                    </div><!-- /.title-section -->
+                </div><!-- /.col-md-12 -->
+            </div><!-- /.row -->
+
+        </div><!-- /.container -->
+    </section>
+<form id="CreateProduct">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="container">
+
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @*@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        @*@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })*@
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Image</label>
+                    <div class="col-md-10">
+                        <input id="ImageUpload" type="file" name="Image" value="" accept=".png , .jpg, .jfif" />
+                        <img id="CategoryImage" />
+                        <input id="ImageURL" type="hidden" name="ImageURL" value="" />
+                    </div>
+                </div>
+
+                <label> Is Featured?</label>
+                <input name="IsFeatured" type="radio" value="True" />True
+                <input name="IsFeatured" type="radio" value="False" />False
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="button" id="SaveBtn" value="Create" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+    </form>
+
+<script>
+
+    
+    $("#ImageUpload").change(function () {
+      
+        var element = this; //
+        var formData = new FormData();
+        var totalFiles = element.files.length; //total file select
+        for (var i = 0; i < totalFiles; i++)
+        {
+            var file = element.files[i];
+            formData.append("Photo", file);
+        }
+        
+
+            $.ajax({
+                type: 'POST',
+                url: '/Shared/UploadImage', // controller ra method name
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false
+            })
+               .done(function (response) {
+                
+                   console.log(response);
+                   if (response.sucess)// console log ma success huncha hernu
+                   {
+                       $("#ImageURL").val(response.ImageURL);// 
+                       $("#CategoryImage").attr("src", response.ImageURL);// Upload vako image dekhako
+                   }
+
+            })
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+            alert("Fail");
+            })
+
+
+    });
+
+
+    $("#SaveBtn").click(function () {
+        
+        if ($("#CreateProduct").valid()) {
+
+       
+       
+        $.ajax({
+            type: "POST",
+            url: '/Category/Create',
+            data: $("#CreateProduct").serialize()
+        })
+            .done(function (response) {
+                $("#TableContainer").html(response);
+                $("#actionContainer").html(""); // save button click pachi hide
+            })
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+
+            });
+
+        }
+
+    else {
+        alert("Fail");   
+    }
+    });
+
+
+    $('#CreateProduct').validate({ // initialize the plugin
+        rules: {
+            Name: {
+                required: true,
+                minlength: 5,
+                maxlength : 256
+            }
+            
+        }, 
+        messages: {
+            Required: "Please specify your name",
+            minlength: "lenth is 5",
+            maxlength: "Max is 50"
+        }
+    });
+
+</script>
+
+
+
+
+

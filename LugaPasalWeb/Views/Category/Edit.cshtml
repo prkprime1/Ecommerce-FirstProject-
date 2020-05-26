@@ -1,0 +1,114 @@
+﻿@model LugaPasalModals.CategoryModal
+
+@{
+    ViewBag.Title = "Edit";
+    var trueChecked = Model.IsFeatured ? "True" : string.Empty;
+    var FalseChecked =Model.IsFeatured ? "False" : string.Empty;
+    var ImageURl = "~/Content/images/Noimage.jpg";
+    if (Model.ImageUrl !=null)
+    {
+        ImageURl = Model.ImageUrl;
+
+    }
+
+}
+  
+    <section class="flat-row flat-iconbox">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="title-section">
+                        <h2 class="title">
+                           Edit
+                        </h2>
+                    </div><!-- /.title-section -->
+                </div><!-- /.col-md-12 -->
+            </div><!-- /.row -->
+
+        </div><!-- /.container -->
+    </section>
+    <form id="EditPRoduct">
+        <div class="container">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.ID)
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label class="control-label col-md-2">Description</label>
+                        <div class="col-md-10">
+                            <input class="form-control" name="Description" value="@Model.Description" />
+                            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div>
+                        <label> Is Featured?</label>
+                        <input name="IsFeatured" type="radio" value="True" @trueChecked />True
+                        <input name="IsFeatured" type="radio" value="False" @FalseChecked checked />False
+                        <br />
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="thumb">
+
+                            <img src="@ImageURl" class="img-thumbnail img-fluid" id="CategoryImage" />
+
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="button" value="Update"  id="UpdateBtn" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+     </form>
+
+<script>
+
+    $("#UpdateBtn").click(function () {
+        var searchValue = $("#Searchtxt").val();
+        $.ajax({
+            type: "POST",
+            url: '/Category/Edit',
+            data: $("#EditPRoduct").serialize()
+        })
+            .done(function (response) {
+                $("#TableContainer").html(response);
+                $("#actionContainer").html(""); // hide gareko
+            })
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+    });
+
+
+</script>
+
+

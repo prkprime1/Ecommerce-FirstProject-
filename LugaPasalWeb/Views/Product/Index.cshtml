@@ -1,0 +1,327 @@
+﻿@model IEnumerable<LugaPasalModals.ProductModals>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<
+
+<section class="flat-row flat-iconbox">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="title-section">
+                    <h2 class="title">
+                        Products
+                    </h2>
+                </div><!-- /.title-section -->
+            </div><!-- /.col-md-12 -->
+        </div><!-- /.row -->
+
+    </div><!-- /.container -->
+</section> @*heading*@
+<div>
+
+    <form method="post">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+
+                    <label> Search</label>
+                    <input id="Searchtxt" type="text" name="Search" value="" placeholder="Search here" />
+
+                </div>
+
+
+            </div>
+            <div class="col-md-4">
+
+                <div class="form-group">
+                    <label>Action</label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" type="button" id="btnSearch">Search </button>
+
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" type="button" id="ResetBtn">Reset </button>
+
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" type="button" id="Newbtn">New </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+        
+
+    </form>
+    
+    
+
+
+</div> @*// buttons*@
+<div>
+    <table id="ProductTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+
+            <th></th>
+        </tr>
+</thead>
+
+
+        <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelproduct => product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelproduct => product.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelproduct => product.Price)
+                </td>
+
+
+
+                <td>
+
+                    <button class="editbutton" data-id="@product.Id">Edit</button>
+                    <button class="DeleteButton" data-id="@product.Id">Delete</button>
+                    <button class="Addtocart" data-id="@product.Id">Add To Cart</button>
+
+
+                </td>
+
+
+            </tr>
+        }
+
+
+    </table>
+</div>    @*table*@
+
+
+<div>
+
+        @foreach (var product in Model)
+        {
+            int i;
+
+            for (i = 0; i < product.one;)
+            {
+                if (product.pagenumber != 1)
+                {
+                    <button class="Pagebutton" data-pageno=" @(product.pagenumber - 1)">Previous</button>
+                }
+
+                <button class="Pagebutton" data-pageno=" @(product.pagenumber + 1)">Next</button>
+                break;
+            }
+
+
+            i++;
+
+            break;
+
+        }
+    </div>
+
+
+<script>
+   
+
+    $(".Pagebutton").click(function () {
+
+
+        $.ajax({
+
+
+            url: '/Product/Index',
+            data: {
+                pageNO: $(this).attr('data-pageno')
+            }
+        })
+            .done(function (response) {
+                $("#TableContainer").html(response);
+            })
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+    });
+
+
+
+    $("#btnSearch").click(function () {
+        var searchValue = $("#Searchtxt").val();
+        $.ajax({
+            url: '/Product/Index',
+            data: {
+                Search: searchValue
+            }
+        })
+            .done(function (response) {
+                $("#TableContainer").html(response);
+            })
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+    });
+
+    $("#ResetBtn").click(function () {
+        var searchValue = '';
+        $.ajax({
+            url: '/Product/Index',
+            data: {
+                Search: searchValue
+            }
+        })
+            .done(function (response) {
+                $("#TableContainer").html(response);
+            })
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+    });
+
+    $("#Newbtn").click(function () {
+
+
+        $.ajax({
+
+            url: '/Product/Create'
+        })
+            .done(function (response) {
+                $("#actionContainer").html(response);
+                FocusAction();
+            })
+
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+
+    });
+
+    $(".editbutton").click(function () {
+
+
+        $.ajax({
+
+            url: '/Product/Edit',
+            data: {
+                ID: $(this).attr('data-id')
+            }
+
+        })
+            .done(function (response) {
+                $("#actionContainer").html(response);
+                FocusAction();
+            })
+
+            .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                alert("Fail");
+            });
+
+    });
+
+    $(".DeleteButton").click(function () {
+
+        swal({
+            title: "Are you sure?",
+            text: "Are you want to delte?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Product/Delete',
+                        data: {
+                            ID: $(this).attr('data-id')
+                        }
+
+                    })
+                        .done(function (response) {
+                            $("#TableContainer").html(response);
+                            swal("Record file has been deleted!", {
+                                icon: "success",
+                            })
+
+                                .fail(function (XMLHTTPRequest, textStatus, errorThrown) {
+                                    alert("Fail");
+                                });
+
+
+
+                        });
+                } else {
+                    swal("Your imaginary file is safe!");
+                }
+            });
+
+        //var con = confirm("Are you want to delte");
+        //if (con) {
+
+
+
+
+        //}
+
+    });
+
+
+    var products = []; /*array initlization*/
+
+    $(".Addtocart").click(function () {
+        var ProductID = $(this).attr('data-id')
+        products.push(ProductID); // adding value to the cookies
+
+        $.cookie('CartProduct', products.join('-'), { path: '/' }); // cartproduct cookie ko name
+        alert("done");
+
+
+
+    });
+
+
+    function FocusAction() {
+
+        $('html, body').animate({
+
+            scrollTop: $("#actionContainer").offset().top = 700 // action conatiner jata dekhaue teta
+        }, 1000);
+
+
+
+
+
+
+    }
+
+
+
+
+
+</script>
+

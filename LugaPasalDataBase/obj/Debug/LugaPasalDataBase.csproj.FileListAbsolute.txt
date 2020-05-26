@@ -1,0 +1,12 @@
+Z:\files\LugaPasal\LugaPasalDataBase\bin\Debug\LugaPasalDataBase.dll.config
+Z:\files\LugaPasal\LugaPasalDataBase\bin\Debug\LugaPasalDataBase.dll
+Z:\files\LugaPasal\LugaPasalDataBase\bin\Debug\LugaPasalDataBase.pdb
+Z:\files\LugaPasal\LugaPasalDataBase\bin\Debug\EntityFramework.dll
+Z:\files\LugaPasal\LugaPasalDataBase\bin\Debug\EntityFramework.SqlServer.dll
+Z:\files\LugaPasal\LugaPasalDataBase\bin\Debug\EntityFramework.xml
+Z:\files\LugaPasal\LugaPasalDataBase\bin\Debug\EntityFramework.SqlServer.xml
+Z:\files\LugaPasal\LugaPasalDataBase\obj\Debug\LugaPasalDataBase.csprojAssemblyReference.cache
+Z:\files\LugaPasal\LugaPasalDataBase\obj\Debug\LugaPasalDataBase.csproj.CoreCompileInputs.cache
+Z:\files\LugaPasal\LugaPasalDataBase\obj\Debug\LugaPasalDataBase.csproj.CopyComplete
+Z:\files\LugaPasal\LugaPasalDataBase\obj\Debug\LugaPasalDataBase.dll
+Z:\files\LugaPasal\LugaPasalDataBase\obj\Debug\LugaPasalDataBase.pdb

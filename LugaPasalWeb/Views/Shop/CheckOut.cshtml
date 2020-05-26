@@ -1,0 +1,55 @@
+﻿@model LugaPasalWeb.Models.VirwModels.CheckOutModels
+
+@{
+    ViewBag.Title = "CheckOut";
+
+}
+
+<h2>CheckOut</h2>
+<div class="container">
+    @if (Model != null)
+    {
+
+        if (Model.CartProducts != null && Model.CartProducts.Count > 0)
+        {
+
+            <div>
+
+                @foreach (var product in Model.CartProducts)
+                {
+                    var productQuantity = Model.cartProductID.Where(x => x == product.Id).Count();
+                  
+
+                    <div>
+
+                       Name: @product.Name -  Price :@product.Price  - Quantity :@productQuantity 
+                      total price : @(product.Price * productQuantity)
+                    </div>
+
+                }
+
+
+            </div>
+
+
+
+            <div>
+
+                Total Bill: @Model.CartProducts.Sum(x=>x.Price * Model.cartProductID.Where(productID => productID ==x.Id).Count())
+
+            </div>
+
+
+        }
+
+        else
+        {
+
+            <div>
+                no product found
+            </div>
+        }
+
+    }
+</div>
+
